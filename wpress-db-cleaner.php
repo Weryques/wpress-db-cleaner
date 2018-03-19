@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: WP Cypress DB Cleaner
-Plugin URI:
+Plugin URI: https://github.com/Weryques/wpress-db-cleaner
 Description: Adds in you api a route to reset the database, for use with Cypress or similar programs.
 Version: 1.0
 Author: Weryques S. Silva
