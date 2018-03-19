@@ -18,11 +18,11 @@ class WPress_DB {
 
 		$tables = $wpdb->get_results($all_tables, ARRAY_A);
 
-		$exception = 'options';
+		$exception = ['options', 'users'];
 		$reseted_tables = [];
 		foreach ( $tables as $table) {
 			foreach ($table as $table_name){
-				if(!strstr($table_name, $exception)) {
+				if(!strstr($table_name, $exception[0]) && !strstr($table_name, $exception[1])) {
 					$reseted_tables[ $table_name ][] = $wpdb->query( "DELETE FROM $table_name WHERE ID > 0" );
 				}
 			}
