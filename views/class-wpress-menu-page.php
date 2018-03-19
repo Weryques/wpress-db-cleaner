@@ -3,8 +3,8 @@
 class WPress_Menu_Page {
 
 	public function __construct() {
-		add_action( 'admin_menu', array($this, 'wpress_options_page') );
-		add_action( 'admin_init', array($this, 'initPage' ) );
+		add_action( 'admin_menu', array(&$this, 'wpress_options_page') );
+		add_action( 'admin_init', array(&$this, 'init_page' ) );
 	}
 
 	public function wpress_options_page_html() {
@@ -17,12 +17,8 @@ class WPress_Menu_Page {
             <h1><?= esc_html( get_admin_page_title() ); ?></h1>
             <form action="options.php" method="post">
 				<?php
-				// output security fields for the registered setting "wporg_options"
 				settings_fields( 'wpress_options' );
-				// output setting sections and their fields
-				// (sections are registered for "wporg", each field is registered to a specific section)
 				do_settings_sections( 'wpress' );
-				// output save settings button
 				submit_button( __('Save Settings') );
 				?>
             </form>
@@ -35,29 +31,28 @@ class WPress_Menu_Page {
 			'WPress',
 			'WPress',
 			'manage_options',
-			'wpress',
-			array($this, 'wpress_options_page_html'),
-			'',
-			20
+			'wpress_menu',
+			array(&$this, 'wpress_options_page_html'),
+			''
 		);
 	}
 
-	function initPage(){
-		register_setting( 'wpress_configurations', 'api_namespace', array($this, 'sanitize'));
-		add_settings_section('configurations-wpress', '', array($this, 'print_namespace_info'), 'wpress_configurations');
-		add_settings_field( 'default-api-namespace', 'Namespace da API:', array($this, 'wpress_namespace_callback'), 'wpress_configurations', 'configurations-wpress');
+	function init_page(){
+		register_setting( 'wpress_options', 'api_namespace', array(&$this, 'sanitize'));
+		add_settings_section('wpress-config', '', array(&$this, 'print_namespace_info'), 'wpress');
+		add_settings_field( 'default-api-namespace', __('API Namespace:'), array(&$this, 'wpress_namespace_callback'), 'wpress', 'wpress-config');
 	}
 
 	function wpress_namespace_callback(){
-		$default_namespace = get_option('api-namespace')['default-api-namespace'];
+		$default_namespace = get_option('api_namespace')['default-api-namespace'];
 
-		printf('<input type="url" id="default-api-namespace" name="api-namespace[default-api-namespace]" value="%s" />',
-			isset( $default_namespace ) ? $default_namespace : ''
+		printf('<input type="text" id="default-api-namespace" name="api_namespace[default-api-namespace]" value="%s" />',
+            isset( $default_namespace ) ? $default_namespace : ''
 		);
 	}
 
 	function print_namespace_info(){
-		print('Digite abaixo o namespace padrão da API (por exemplo: wp/v2');
+		print(__('Enter the default namespace of API (for example: wp/v2)'));
 	}
 
 	function sanitize( $input ){
