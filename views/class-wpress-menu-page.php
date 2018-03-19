@@ -43,9 +43,13 @@ class WPress_Menu_Page {
 	}
 
 	function init_page(){
-		register_setting( 'wpress_options', 'api_namespace', array(&$this, 'sanitize'));
+		register_setting( 'wpress_options', 'api_namespace', array(&$this, 'sanitize_api_namespace'));
+		register_setting( 'wpress_options', 'wpress_prefix', array(&$this, 'sanitize_db_prefix'));
+
 		add_settings_section('wpress-config', '', array(&$this, 'print_namespace_info'), 'wpress');
+
 		add_settings_field( 'default-api-namespace', __('API Namespace:'), array(&$this, 'wpress_namespace_callback'), 'wpress', 'wpress-config');
+		add_settings_field('default-db-prefix', __('Database prefix:'), array(&$this, 'wpress_db_prefix_callback'), 'wpress', 'wpress-config');
 	}
 
 	function wpress_namespace_callback(){
@@ -56,8 +60,16 @@ class WPress_Menu_Page {
 		);
 	}
 
+	function wpress_db_prefix_callback(){
+		$default_db_prefix = get_option('wpress_prefix')['default-db-prefix'];
+
+		printf('<input type="text" id="default-db-prefix" name="wpress_prefix[default-db-prefix]" value="%s" />',
+			isset( $default_db_prefix ) ? $default_db_prefix : ''
+		);
+	}
+
 	function print_namespace_info(){
-		print(__('Enter the default namespace of API (for example: wp/v2)'));
+		print(__('Enter the namespace of API (for example: wp/v2) and the prefix of database (for example wp_)'));
 	}
 
 	/**
@@ -65,7 +77,7 @@ class WPress_Menu_Page {
 	 *
 	 * @return array
 	 */
-	function sanitize( $input ){
+	function sanitize_api_namespace( $input ){
 		$new_input = array();
 
 		if( isset( $input['default-api-namespace'] ) ){
@@ -74,6 +86,16 @@ class WPress_Menu_Page {
 
 		return $new_input;
 	}
+
+	function sanitize_db_prefix($input){
+	    $new_input = array();
+
+		if (isset( $input['default-db-prefix'])){
+			$new_input['default-db-prefix'] = sanitize_text_field( $input['default-db-prefix'] );
+		}
+
+		return $new_input;
+    }
 
 }
 

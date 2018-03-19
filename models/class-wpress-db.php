@@ -10,11 +10,22 @@ class WPress_DB {
 	public function reset_database() {
 		global $wpdb;
 
-		$tables = $wpdb->tables('all', $wpdb->prefix);
+		$prefix = get_option( 'wpress_prefix' )['default-db-prefix'] . '%%';
 
+		$db_name = DB_NAME;
+
+		$all_tables = $wpdb->prepare("SHOW TABLES FROM $db_name WHERE Tables_in_$db_name LIKE %s", $prefix);
+
+		$tables = $wpdb->get_results($all_tables, ARRAY_A);
+
+		$exception = 'options';
 		$reseted_tables = [];
-		foreach ($tables as $table){
-			$reseted_tables[$table][] = $wpdb->delete($table, ['ID' => '> -1']);
+		foreach ( $tables as $table) {
+			foreach ($table as $table_name){
+				if(!strstr($table_name, $exception)) {
+					$reseted_tables[ $table_name ][] = $wpdb->query( "DELETE FROM $table_name WHERE ID > 0" );
+				}
+			}
 		}
 
 		return $reseted_tables;
