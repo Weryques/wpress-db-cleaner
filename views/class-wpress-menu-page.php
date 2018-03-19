@@ -1,7 +1,12 @@
 <?php
 
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
 class WPress_Menu_Page {
 
+	/**
+	 * WPress_Menu_Page constructor.
+	 */
 	public function __construct() {
 		add_action( 'admin_menu', array(&$this, 'wpress_options_page') );
 		add_action( 'admin_init', array(&$this, 'init_page' ) );
@@ -55,6 +60,11 @@ class WPress_Menu_Page {
 		print(__('Enter the default namespace of API (for example: wp/v2)'));
 	}
 
+	/**
+	 * @param $input
+	 *
+	 * @return array
+	 */
 	function sanitize( $input ){
 		$new_input = array();
 

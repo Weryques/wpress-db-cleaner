@@ -14,5 +14,4 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 require_once(__DIR__ . '/views/class-wpress-menu-page.php');
 require_once(__DIR__ . '/api-controllers/class-wpress-api-creator.php');
 
-
 $menu_page = new WPress_Menu_Page();
