@@ -10,7 +10,7 @@ class WPress_DB {
 	public function reset_database() {
 		global $wpdb;
 
-		$prefix = get_option( 'wpress_prefix' )['default-db-prefix'] . '%%';
+		$prefix = get_option( 'wpress_prefix' ) . '%%';
 
 		$db_name = DB_NAME;
 

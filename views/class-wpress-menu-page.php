@@ -53,7 +53,7 @@ class WPress_Menu_Page {
 	}
 
 	function wpress_namespace_callback(){
-		$default_namespace = get_option('api_namespace')['default-api-namespace'];
+		$default_namespace = get_option('api_namespace');
 
 		printf('<input type="text" id="default-api-namespace" name="api_namespace[default-api-namespace]" value="%s" />',
             isset( $default_namespace ) ? $default_namespace : ''
@@ -61,7 +61,7 @@ class WPress_Menu_Page {
 	}
 
 	function wpress_db_prefix_callback(){
-		$default_db_prefix = get_option('wpress_prefix')['default-db-prefix'];
+		$default_db_prefix = get_option('wpress_prefix');
 
 		printf('<input type="text" id="default-db-prefix" name="wpress_prefix[default-db-prefix]" value="%s" />',
 			isset( $default_db_prefix ) ? $default_db_prefix : ''
@@ -69,7 +69,7 @@ class WPress_Menu_Page {
 	}
 
 	function print_namespace_info(){
-		print(__('Enter the namespace of API (for example: wp/v2) and the prefix of database (for example wp_)'));
+		print(__('Enter the namespace of API (for example: wp/v2) and the prefix of database (for example: wp_)'));
 	}
 
 	/**
